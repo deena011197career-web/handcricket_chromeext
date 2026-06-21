@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Hand Cricket",
+  "version": "1.0.0",
+  "description": "Play Hand Cricket against the computer. Pick 1-6 — same number means OUT!",
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Hand Cricket",
+    "default_icon": {
+      "16": "assets/icon16.png",
+      "32": "assets/icon32.png",
+      "48": "assets/icon48.png",
+      "128": "assets/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "assets/icon16.png",
+    "32": "assets/icon32.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [],
+  "minimum_chrome_version": "102"
+}

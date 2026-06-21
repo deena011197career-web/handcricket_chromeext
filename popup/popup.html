@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hand Cricket</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- Theme toggle (always visible) -->
+  <button class="theme-btn" id="theme-btn" aria-label="Toggle theme">
+    <span id="theme-icon">☀</span>
+  </button>
+
+  <!-- ═══════════════════════════════════════════ WELCOME ══ -->
+  <div class="screen active" id="screen-welcome">
+    <div class="welcome-body">
+      <div class="brand-glow">
+        <div class="brand-mark">🏏</div>
+      </div>
+      <h1 class="brand-title">HAND<br>CRICKET</h1>
+      <p class="brand-sub">You vs Computer</p>
+    </div>
+    <div class="rule-hint">
+      Pick <strong>1–6</strong> · Same number = <span class="text-red">OUT</span>
+    </div>
+    <button class="btn-primary" id="btn-start">START GAME</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ TOSS ══════ -->
+  <div class="screen" id="screen-toss">
+    <div class="screen-top">
+      <div class="chip">TOSS</div>
+      <h2>Call it right</h2>
+      <p class="sub">Computer reveals a number 1–6</p>
+    </div>
+    <div class="toss-pick-area">
+      <p class="toss-prompt">Is the computer's number…</p>
+      <div class="toss-btns">
+        <button class="btn-toss" data-pick="odd">ODD</button>
+        <button class="btn-toss" data-pick="even">EVEN</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═════════════════════════════════════════ TOSS RESULT ══ -->
+  <div class="screen" id="screen-toss-result">
+    <div class="screen-top">
+      <div class="chip">TOSS RESULT</div>
+    </div>
+
+    <div class="reveal-card">
+      <span class="reveal-tag">Computer showed</span>
+      <div class="reveal-num" id="tr-cpu-num">—</div>
+      <div class="reveal-parity" id="tr-cpu-parity">—</div>
+    </div>
+
+    <div class="toss-compare">
+      <div class="compare-row">
+        <span class="sub">You called</span>
+        <span class="compare-val" id="tr-user-pick">—</span>
+      </div>
+    </div>
+
+    <div class="verdict" id="tr-verdict">—</div>
+
+    <div id="tr-user-won" class="toss-action hidden">
+      <p class="sub">You won — choose to:</p>
+      <div class="side-btns">
+        <button class="btn-side" data-side="bat">🏏 BAT FIRST</button>
+        <button class="btn-side" data-side="bowl">BOWL FIRST 🎯</button>
+      </div>
+    </div>
+
+    <div id="tr-cpu-won" class="toss-action hidden">
+      <p class="cpu-decision" id="tr-cpu-decision">Computer chose to bat</p>
+      <button class="btn-primary" id="btn-start-play">LET'S PLAY →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ PLAY ═══════ -->
+  <div class="screen" id="screen-play">
+
+    <div class="play-head">
+      <div class="innings-chip" id="play-innings">1ST INNINGS</div>
+
+      <div class="scoreboard">
+        <div class="score-col">
+          <div class="score-label">YOU</div>
+          <div class="score-wrap">
+            <div class="score-val" id="play-user-score">0</div>
+          </div>
+        </div>
+        <div class="score-sep">·</div>
+        <div class="score-col">
+          <div class="score-label">CPU</div>
+          <div class="score-wrap">
+            <div class="score-val" id="play-cpu-score">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="target-strip hidden" id="play-target-strip">
+        Need <span id="play-need">—</span> more to win
+      </div>
+    </div>
+
+    <div class="role-banner" id="play-role">You are batting</div>
+
+    <!-- Move reveal arena -->
+    <div class="move-arena" id="move-arena">
+      <div class="move-side">
+        <div class="move-tag">YOU</div>
+        <div class="move-card" id="user-move-card">
+          <span class="move-digit" id="md-user">?</span>
+        </div>
+      </div>
+
+      <div class="move-center">
+        <div class="move-vs" id="md-result">VS</div>
+      </div>
+
+      <div class="move-side">
+        <div class="move-tag">CPU</div>
+        <div class="move-card" id="cpu-move-card">
+          <span class="move-digit" id="md-cpu">?</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Number picker -->
+    <div class="num-grid">
+      <button class="num-btn" data-n="1">1</button>
+      <button class="num-btn" data-n="2">2</button>
+      <button class="num-btn" data-n="3">3</button>
+      <button class="num-btn" data-n="4">4</button>
+      <button class="num-btn" data-n="5">5</button>
+      <button class="num-btn" data-n="6">6</button>
+    </div>
+
+    <!-- Recent move history -->
+    <div class="history-row" id="play-history"></div>
+
+    <!-- CPU thinking indicator -->
+    <div class="thinking-dots hidden" id="cpu-thinking">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ OUT SCREEN ══ -->
+  <div class="screen" id="screen-out">
+    <div class="out-flash">OUT!</div>
+
+    <div class="out-body">
+      <div class="out-info" id="out-innings-summary">—</div>
+
+      <div class="out-target-card">
+        <div class="out-target-label">TARGET</div>
+        <div class="out-target-num" id="out-target-num">—</div>
+        <div class="out-target-sub">runs to win</div>
+      </div>
+
+      <div class="out-next" id="out-next-info">—</div>
+    </div>
+
+    <button class="btn-primary" id="btn-next-innings">NEXT INNINGS →</button>
+  </div>
+
+  <!-- ═════════════════════════════════════════ RESULT ════════ -->
+  <div class="screen" id="screen-result">
+    <div class="result-icon" id="res-icon">🏆</div>
+    <div class="result-title" id="res-title">YOU WIN!</div>
+
+    <div class="result-card">
+      <div class="result-row">
+        <span>You</span>
+        <span class="result-score" id="res-user-score">0</span>
+      </div>
+      <div class="result-divider"></div>
+      <div class="result-row">
+        <span>Computer</span>
+        <span class="result-score" id="res-cpu-score">0</span>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="btn-play-again">PLAY AGAIN</button>
+  </div>
+
+</div>
+<!-- Confetti (shown on win) -->
+<div class="confetti-wrap" id="confetti-wrap">
+  <span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span>
+</div>
+
+<script src="../game/engine.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>
