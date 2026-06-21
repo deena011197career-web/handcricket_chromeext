@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Generate Hand Cricket Icons</title>
+  <style>
+    body { font-family: system-ui; background: #0b0b13; color: #f0f0f8;
+           display: flex; flex-direction: column; align-items: center;
+           gap: 20px; padding: 40px; }
+    h2 { font-size: 18px; letter-spacing: 2px; }
+    .row { display: flex; gap: 20px; align-items: flex-end; }
+    .item { display: flex; flex-direction: column; align-items: center; gap: 8px;
+            font-size: 12px; color: #555; }
+    canvas { border-radius: 12px; }
+    a { color: #4ade80; text-decoration: none; font-size: 11px;
+        border: 1px solid #4ade80; padding: 4px 10px; border-radius: 4px; }
+    a:hover { background: rgba(74,222,128,.1); }
+  </style>
+</head>
+<body>
+  <h2>HAND CRICKET — Icon Generator</h2>
+  <p style="color:#555;font-size:12px">Click each link to download. Save as the shown filename in /assets/</p>
+  <div class="row" id="icons"></div>
+
+  <script>
+    const SIZES = [16, 32, 48, 128];
+
+    SIZES.forEach(size => {
+      const canvas = document.createElement('canvas');
+      canvas.width = canvas.height = size;
+      const ctx = canvas.getContext('2d');
+
+      // Background
+      const grad = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
+      grad.addColorStop(0, '#1a3a2a');
+      grad.addColorStop(1, '#0b1a12');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.roundRect(0, 0, size, size, size * 0.18);
+      ctx.fill();
+
+      // Cricket bat emoji scaled
+      ctx.font = `${size * 0.62}px serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('🏏', size / 2, size / 2 + size * 0.04);
+
+      // Download link
+      const a = document.createElement('a');
+      a.href     = canvas.toDataURL('image/png');
+      a.download = `icon${size}.png`;
+      a.textContent = `↓ icon${size}.png`;
+
+      const label = document.createElement('span');
+      label.textContent = `${size}×${size}`;
+
+      const item = document.createElement('div');
+      item.className = 'item';
+      item.append(canvas, label, a);
+
+      document.getElementById('icons').append(item);
+    });
+  </script>
+</body>
+</html>
